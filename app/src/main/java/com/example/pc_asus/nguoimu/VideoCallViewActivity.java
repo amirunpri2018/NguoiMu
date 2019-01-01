@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -120,6 +121,7 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
             setContentView(R.layout.activity_video_call_view);
             tts= new TextToSpeech(this, this);
 
+            setTitle("                        Video Call");
             mCurrentUser= FirebaseAuth.getInstance().getCurrentUser();
             uid= mCurrentUser.getUid();
             mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -132,11 +134,23 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
             }
 
             TextView tv_endCall= findViewById(R.id.tv_endCallActivity);
+            final int[] countTap = {0};
             tv_endCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mDatabase.child("TinhNguyenVien").child("Status").child(idSelected).child("connectionRequest").setValue(0);
-                    finish();
+                    countTap[0]++;
+                    if(countTap[0]>=2) {
+                        mDatabase.child("TinhNguyenVien").child("Status").child(idSelected).child("connectionRequest").setValue(0);
+                        finish();
+                    }
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countTap[0]=0;
+                        }
+                    }, 1000);
                 }
             });
 
@@ -596,7 +610,11 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                                     }
                                 });
                                 Log.e("arr", "id tnv được chọn"+idSelected);
-                            }else  tts.speak("không có tình nguyện viên nào đang rãnh", TextToSpeech.QUEUE_FLUSH, null);
+                            }else{
+                                Toast.makeText(VideoCallViewActivity.this, "không có tình nguyện viên nào đang rãnh", Toast.LENGTH_SHORT).show();
+                                tts.speak("không có tình nguyện viên nào đang rãnh", TextToSpeech.QUEUE_FLUSH, null);
+                                finish();
+                            }
 
                         }
 
@@ -704,5 +722,12 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mDatabase.child("TinhNguyenVien").child("Status").child(idSelected).child("connectionRequest").setValue(0);
+        finish();
     }
 }
