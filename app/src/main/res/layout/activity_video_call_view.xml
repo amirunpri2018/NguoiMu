@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Chạm vào màn hình để hủy kết nối"
+        android:text="Chạm 2 lần vào màn hình để hủy kết nối"
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="18sp"
         android:textStyle="bold"
