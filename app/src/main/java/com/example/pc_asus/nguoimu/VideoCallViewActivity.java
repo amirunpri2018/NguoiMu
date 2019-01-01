@@ -596,7 +596,8 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                                     }
                                 });
                                 Log.e("arr", "id tnv được chọn"+idSelected);
-                            }
+                            }else  tts.speak("không có tình nguyện viên nào đang rãnh", TextToSpeech.QUEUE_FLUSH, null);
+
                         }
 
                 }

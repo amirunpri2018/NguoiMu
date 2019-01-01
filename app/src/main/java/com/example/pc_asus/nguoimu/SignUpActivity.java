@@ -38,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        setTitle("                        Đăng Ký");
         edt_email = findViewById(R.id.edt_email2);
         edt_password = findViewById(R.id.edt_pass2);
         edt_name = findViewById(R.id.edt_hoTen);
