@@ -299,6 +299,8 @@ public class MainActivity extends AppCompatActivity
                     }else if (result.get(i).equalsIgnoreCase("đây là ai")) {
                         tts.speak("hãy hướng camera về người cần nhận diện", TextToSpeech.QUEUE_FLUSH,null);
                         startActivity(new Intent(MainActivity.this, FaceTrackerActivity.class));
+                    }else if (result.get(i).equalsIgnoreCase("mở")) {
+                        startActivity(new Intent(MainActivity.this, FaceRecognitionActivity.class));
                     }
 
 

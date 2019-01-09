@@ -31,6 +31,7 @@ public class CheckOpenAppService extends Service implements SensorEventListener{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("abc", "start service");
+        Toast.makeText(CheckOpenAppService.this, "start service", Toast.LENGTH_SHORT).show();
 
 //        sManager = (SensorManager)  getSystemService(Context.SENSOR_SERVICE);
 //           Sensor s = sManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -82,9 +83,10 @@ public class CheckOpenAppService extends Service implements SensorEventListener{
                     i++;
                     mLastShakeTime = curTime;
                     Log.e("abc", i+ " Shake, Rattle, and Roll "+acceleration);
+                    Toast.makeText(CheckOpenAppService.this, "shake", Toast.LENGTH_SHORT).show();
+
                     if(i>=2) {
                         i=0;
-                        Toast.makeText(CheckOpenAppService.this,"Dang mo app",Toast.LENGTH_LONG).show();
                         Log.e("abc","mở activity");
 
                         Intent intent1 = new Intent(CheckOpenAppService.this, MainActivity.class);
