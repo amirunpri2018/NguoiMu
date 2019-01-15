@@ -89,7 +89,7 @@
             android:name=".FaceRecognition.TrainingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:label="                 Nhận Diện"
+            android:label="                     Nhận Diện"
             android:name=".FaceRecognition.liveVideo.FaceTrackerActivity"
             android:screenOrientation="portrait" />
 

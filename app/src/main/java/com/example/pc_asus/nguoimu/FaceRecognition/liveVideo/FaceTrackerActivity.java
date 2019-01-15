@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -142,6 +143,8 @@ public final class FaceTrackerActivity extends AppCompatActivity implements Text
 
                         newFaceId[0] = face.getId();
 
+                        Log.e("abc", "face...."+face.getId());
+
                         if (newFaceId[0] != faceId[0]  && getBitmapFinish[0] ==true ) {
 
                             getBitmapFinish[0] =false;
@@ -177,6 +180,7 @@ public final class FaceTrackerActivity extends AppCompatActivity implements Text
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                //    Toast.makeText(context, "detect", Toast.LENGTH_SHORT).show();
                                                     img_face_detected.setImageBitmap(finalBitmapPicture);
                                                     img_face_detected.setVisibility(View.VISIBLE);
 
@@ -186,13 +190,19 @@ public final class FaceTrackerActivity extends AppCompatActivity implements Text
                                             File f = convertBitmapToFile(bitmapPicture);
                                             getDataApi(f);
                                             Log.e("abc", "đã chụp");
+
                                             getBitmapFinish[0]=true;
                                         }
-                                    }, 300);
+                                    }, 200);
                                 }
                             });
 
-
+//                            new Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    getBitmapFinish[0]=true;
+//                                }
+//                                }, 1000);
 
 
 
@@ -382,27 +392,32 @@ public final class FaceTrackerActivity extends AppCompatActivity implements Text
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                //    dialog.dismiss();
-                Toast.makeText(FaceTrackerActivity.this, response.body(), Toast.LENGTH_SHORT).show();
-                Log.e("abc", "result=" + response.body());
-                img_face_detected.setVisibility(View.INVISIBLE);
-                String[] strPerson= response.body().split("\n");
-                String people="";
-                for(int i=0;i<strPerson.length;i++){
-                    String[] str= strPerson[i].split("-");
-                    if(strPerson[i].contains("có khuôn mặt") ||strPerson[i].contains("BadArgument")){
-                        Log.e("abc","constrain có khuôn mặt" );
-                    }else  people=people+" "+str[0];
-                }
-                tts.speak(people, TextToSpeech.QUEUE_FLUSH, null);
 
+               try {
+                   //    dialog.dismiss();
+                   Toast.makeText(FaceTrackerActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                   Log.e("abc", "result=" + response.body());
+                   img_face_detected.setVisibility(View.INVISIBLE);
+                   String[] strPerson = response.body().split("\n");
+                   String people = "";
+                   for (int i = 0; i < strPerson.length; i++) {
+                       String[] str = strPerson[i].split("-");
+                       if (strPerson[i].contains("có khuôn mặt") || strPerson[i].contains("BadArgument") || strPerson[i].contains("phát hiện") || strPerson[i].contains("Rate"))  {
+                           Log.e("abc", "constrain có khuôn mặt");
+                       } else people = people + " " + str[0];
+                   }
+                   tts.speak(people, TextToSpeech.QUEUE_FLUSH, null);
+               }catch(Exception e){
+                }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.e("abc", "lỗi " + t);
-                Toast.makeText(FaceTrackerActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-                tts.speak("Lỗi", TextToSpeech.QUEUE_FLUSH, null);
+                Toast.makeText(FaceTrackerActivity.this, "Lỗi kết nối api "+t, Toast.LENGTH_SHORT).show();
+               // startActivity(new Intent(FaceTrackerActivity.this, FaceTrackerActivity.class));
+               // finish();
+            //    tts.speak("Lỗi", TextToSpeech.QUEUE_FLUSH, null);
                 //     dialog.dismiss();
             }
         });
