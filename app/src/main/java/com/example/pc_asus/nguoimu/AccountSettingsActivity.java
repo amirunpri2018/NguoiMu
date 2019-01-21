@@ -66,6 +66,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         edt_name=findViewById(R.id.edt_as_name);
         tv_email= findViewById(R.id.tv_as_email);
+        tv_email.setSelected(true);
         edt_phoneNumber= findViewById(R.id.edt_as_phoneNumber);
         btn_choose=findViewById(R.id.btn_as_choose);
         btn_camera= findViewById(R.id.btn_as_camera);

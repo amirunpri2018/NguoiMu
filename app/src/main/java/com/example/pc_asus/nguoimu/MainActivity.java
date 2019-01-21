@@ -1,12 +1,15 @@
 package com.example.pc_asus.nguoimu;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -47,7 +50,16 @@ public class MainActivity extends AppCompatActivity
     String uid;
     TextToSpeech tts;
     private final int REQ_CODE_SPEECH_INPUT = 100;
-
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
+            android.Manifest.permission.ACCESS_NETWORK_STATE,
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +111,9 @@ public class MainActivity extends AppCompatActivity
             Intent intent2 = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent2);
         } else {
+            if(!hasPermissions(this, PERMISSIONS)){
+                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+            }
             uid = mCurrentUser.getUid();
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("NguoiMu").child("Users").child(uid).addValueEventListener(new ValueEventListener() {
@@ -271,6 +286,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     /**
      * Trả lại dữ liệu sau khi nhập giọng nói vào
      */
