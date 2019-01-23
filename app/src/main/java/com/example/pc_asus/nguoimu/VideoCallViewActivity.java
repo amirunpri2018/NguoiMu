@@ -140,7 +140,9 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                 public void onClick(View v) {
                     countTap[0]++;
                     if(countTap[0]>=2) {
-                        mDatabase.child("TinhNguyenVien").child("Status").child(idSelected).child("connectionRequest").setValue(0);
+                        try {
+                            mDatabase.child("TinhNguyenVien").child("Status").child(idSelected).child("connectionRequest").setValue(0);
+                        }catch (Exception e){}
                         finish();
                     }
 
@@ -416,7 +418,7 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                                         checkStatusOfDevice();
 
                                     }
-                                }, 1000);
+                                }, 5000);
 
 
                                 // nếu TNV ko bắt máy thì sẽ kết nối lại vs TNV  random
@@ -444,6 +446,7 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                                             } else if (disconnect.equalsIgnoreCase("0")) {
                                                 tts.speak("đã ngắt kết nối", TextToSpeech.QUEUE_FLUSH, null);
                                                 check[0] =false;
+                                                  //  mDatabase.child("TinhNguyenVien").child("Status").child(uid).child("checkStatusDevice").setValue(0);
                                                 finish();
                                             }
                                         }
@@ -459,6 +462,7 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
 
                                 Log.e("arr","id bạn bè được chọn "+ idSelected);
                             }else{ // bạn bè ko có ai rãnh thì kết nối vs người lạ
+                                Log.e("arr","không  có bạn bè đang rãnh");
                                 getListVolunteers(uid);
                             }
                         }
@@ -564,6 +568,7 @@ public class VideoCallViewActivity extends AppCompatActivity implements  TextToS
                         if (dataSnapshot.getKey().equalsIgnoreCase(arr.get(arr.size()-1))) {
 
                             // chọn dc bbe đang rãnh
+                            Toast.makeText(VideoCallViewActivity.this, "size:"+arrTNVFreeTime.size(), Toast.LENGTH_SHORT).show();
                             if(arrTNVFreeTime.size()!=0) {
                                 Random rd = new Random();
                                 int number = rd.nextInt(arrTNVFreeTime.size());

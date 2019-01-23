@@ -85,7 +85,7 @@ public class CheckOpenAppService extends Service implements SensorEventListener{
                     Log.e("abc", i+ " Shake, Rattle, and Roll "+acceleration);
                     Toast.makeText(CheckOpenAppService.this, "shake", Toast.LENGTH_SHORT).show();
 
-                    if(i>=2) {
+                    if(i>=1) {
                         i=0;
                         Log.e("abc","mở activity");
 
